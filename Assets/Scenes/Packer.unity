@@ -774,7 +774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!4 &475793302
 Transform:
@@ -1205,6 +1205,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Metallic
       objectReference: {fileID: 0}
+    - target: {fileID: 2929099004376108570, guid: 9683494bd4e8760418883487063bb708, type: 3}
+      propertyPath: defaultDefaultValue
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3469985114548857848, guid: 9683494bd4e8760418883487063bb708, type: 3}
       propertyPath: m_Name
       value: Metallic
@@ -1292,6 +1296,14 @@ PrefabInstance:
     - target: {fileID: 4380146644460953737, guid: 9683494bd4e8760418883487063bb708, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8315991191791946394, guid: 9683494bd4e8760418883487063bb708, type: 3}
+      propertyPath: m_Text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8451929828213135457, guid: 9683494bd4e8760418883487063bb708, type: 3}
+      propertyPath: m_text
+      value: "0\u200B"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9683494bd4e8760418883487063bb708, type: 3}

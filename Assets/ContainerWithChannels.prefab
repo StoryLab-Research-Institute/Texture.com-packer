@@ -1359,6 +1359,10 @@ PrefabInstance:
       propertyPath: ToggleR
       value: 
       objectReference: {fileID: 1788661868841392015}
+    - target: {fileID: 3177253774111990933, guid: 82adba64c9abf114da8c7cd1f87072df, type: 3}
+      propertyPath: ToggleGroup
+      value: 
+      objectReference: {fileID: 5002126656274675201}
     - target: {fileID: 3789289170056036727, guid: 82adba64c9abf114da8c7cd1f87072df, type: 3}
       propertyPath: m_Name
       value: ContainerWithChannels
@@ -1446,6 +1450,10 @@ PrefabInstance:
     - target: {fileID: 4069274208910821894, guid: 82adba64c9abf114da8c7cd1f87072df, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5253586702968090130, guid: 82adba64c9abf114da8c7cd1f87072df, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82adba64c9abf114da8c7cd1f87072df, type: 3}

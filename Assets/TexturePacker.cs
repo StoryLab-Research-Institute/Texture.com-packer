@@ -73,58 +73,36 @@ public class TexturePacker : MonoBehaviour
         if (doAT)
         {
             byte[] atBytes;
-            if (transparencyContainer.Image == null)
-            {
-                atBytes = baseColorContainer.Image.EncodeToPNG();
-            }
-            else if(baseColorContainer.Image == null)
-            {
-                int width = transparencyContainer.Image.width;
-                int height = transparencyContainer.Image.height;
 
-                Color32[] atColors = new Color32[width * height];
-                Color32[] transparencyPixels = transparencyContainer.Image.GetPixels32();
+            int width;
+            if (baseColorContainer.Image != null) width = baseColorContainer.Image.width;
+            else width = transparencyContainer.Image.width;
 
-                for (int x = 0; x < width; x++)
+            int height;
+            if (baseColorContainer.Image != null) height = baseColorContainer.Image.height;
+            else height = transparencyContainer.Image.height;
+
+            Color32[] atColors = new Color32[width * height];
+
+            Color32[] baseColorColors = GetPixels32(baseColorContainer, width, height);
+            Color32[] transparencyColors = GetPixels32(transparencyContainer, width, height);
+
+            ColorChannel transparencyChannel = transparencyContainer.GetChannel();
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
                 {
-                    for (int y = 0; y < height; y++)
-                    {
-                        int t = (y * width) + x;
-                        atColors[t] = new Color32(0, 0, 0, transparencyPixels[t].r);
-                    }
+                    int t = (y * width) + x;
+
+                    atColors[t] = new Color32(baseColorColors[t].r, baseColorColors[t].g, baseColorColors[t].b, ByteFromColor32Channel(transparencyColors[t], transparencyChannel));
                 }
-
-                Texture2D atTex = new(width, height);
-                atTex.SetPixels32(atColors);
-                atBytes = atTex.EncodeToPNG();
             }
-            else
-            {
-                int width = baseColorContainer.Image.width;
-                int height = baseColorContainer.Image.height;
 
-                Color32[] atColors = new Color32[width * height];
+            Texture2D atTex = new(width, height);
+            atTex.SetPixels32(atColors);
+            atBytes = atTex.EncodeToPNG();
 
-                Color32[] baseColorColors = baseColorContainer.Image.GetPixels32();
-                Color32[] transparencyColors = transparencyContainer.Image.GetPixels32();
-
-                ColorChannel transparencyChannel = transparencyContainer.GetChannel();
-
-                for (int x = 0; x < width; x++)
-                {
-                    for (int y = 0; y < height; y++)
-                    {
-                        int t = (y * width) + x;
-
-                        atColors[t] = new Color32(baseColorColors[t].r, baseColorColors[t].g, baseColorColors[t].b, ByteFromColor32Channel(transparencyColors[t], transparencyChannel));
-                    }
-                }
-
-                Texture2D atTex = new(width, height);
-                atTex.SetPixels32(atColors);
-                atBytes = atTex.EncodeToPNG();
-
-            }
             File.WriteAllBytes(path + "_AlbedoTransparency.png", atBytes);
         }
 
@@ -143,9 +121,9 @@ public class TexturePacker : MonoBehaviour
             else if (aoContainer.Image != null) height = aoContainer.Image.height;
             else height = roughnessContainer.Image.height;
 
-            Color32[] metallicColors = GetPixels32IfExists(metallicContainer.Image, width, height);
-            Color32[] aoColors = GetPixels32IfExists(aoContainer.Image, width, height);
-            Color32[] roughnessColors = GetPixels32IfExists(roughnessContainer.Image, width, height);
+            Color32[] metallicColors = GetPixels32(metallicContainer, width, height);
+            Color32[] aoColors = GetPixels32(aoContainer, width, height);
+            Color32[] roughnessColors = GetPixels32(roughnessContainer, width, height);
 
             ColorChannel metallicChannel = metallicContainer.GetChannel();
             ColorChannel aoChannel = aoContainer.GetChannel();
@@ -178,7 +156,7 @@ public class TexturePacker : MonoBehaviour
         //do the normals image (literally just renaming and moving this one)
         if(doN)
         {
-            File.WriteAllBytes(path + "_MetallicOcclusionSmoothness.png", normalContainer.Image.EncodeToPNG());
+            File.WriteAllBytes(path + "_Normal.png", normalContainer.Image.EncodeToPNG());
         }
 
         return "Pack complete!";
@@ -201,14 +179,15 @@ public class TexturePacker : MonoBehaviour
         return texA.width != texB.width || texA.height != texB.height;
     }
 
-    private Color32[] GetPixels32IfExists(Texture2D texture, int expectedWidth, int expectedHeight)
+    private Color32[] GetPixels32(TextureContainer container, int expectedWidth, int expectedHeight)
     {
-        if (texture != null) return texture.GetPixels32();
+        if (container.Image != null) return container.Image.GetPixels32();
 
         Color32[] cols = new Color32[expectedWidth * expectedHeight];
         for (int i = 0; i < cols.Length; i++)
         {
-            cols[i] = new Color32(0, 0, 0, 1);
+            byte val = (byte)Mathf.RoundToInt(container.DefaultValue * 255);
+            cols[i] = new Color32(val, val, val, val);
         }
         return cols;
     }
